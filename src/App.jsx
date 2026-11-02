@@ -2,6 +2,13 @@ import { useEffect, useRef } from 'react';
 import logo from './assets/logo.png';
 import hero from './assets/hero.jpg';
 
+const PHONE = '+91 63824 63706';
+const TEL = 'tel:+916382463706';
+const WA = 'https://wa.me/916382463706?text=' + encodeURIComponent('Hello Thiraiyal Health Care, I would like to book an appointment.');
+const WA_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.3z"/></svg>';
+const waIcon = <span className="ico-inline" dangerouslySetInnerHTML={{ __html: WA_ICON }} />;
+const phoneIcon = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" /></svg>;
+
 export default function App() {
   const initialized = useRef(false);
 
@@ -9,7 +16,6 @@ export default function App() {
     if (initialized.current) return;
     initialized.current = true;
 
-    const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
     const lerp = (a, b, t) => a + (b - a) * t;
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
@@ -115,8 +121,6 @@ export default function App() {
     }
 
     const big = document.getElementById('ecg');
-    const bigBpm = document.getElementById('bigBpm');
-    const miniBpm = document.getElementById('miniBpm');
     const heroWord = document.getElementById('heroWord');
     const hint = document.getElementById('hintText');
     const bigTrace = makeTrace(big, {
@@ -131,28 +135,11 @@ export default function App() {
       hot: '#FF8A73',
       cool: '#7EF0DD',
       onFrame(c) {
-        const bpm = bpmOf(c);
-        bigBpm.textContent = bpm;
-        miniBpm.textContent = bpm;
         heroWord.classList.toggle('calm', c > 0.45);
       },
     });
 
-    const miniTrace = makeTrace(document.getElementById('mini'), {
-      step: 1.5,
-      speed: 1,
-      dt: 1 / 60,
-      base: 0.62,
-      amp: 0.45,
-      width: 1.6,
-      glow: 0,
-      grid: false,
-      hot: css('--pulse') || '#F0614B',
-      cool: css('--teal') || '#0E9F8E',
-    });
-
     let holding = false;
-    const mon = document.getElementById('monitor');
     function ptr(e) {
       const r = big.getBoundingClientRect();
       const t = e.touches ? e.touches[0] : e;
@@ -183,18 +170,13 @@ export default function App() {
     function loop() {
       touchCalm = holding ? Math.min(1, touchCalm + 0.012) : Math.max(0, touchCalm - 0.004);
       bigTrace.draw();
-      miniTrace.draw();
       requestAnimationFrame(loop);
     }
 
     computeCalm();
     if (reduce) {
       bigTrace.draw();
-      miniTrace.draw();
-      setInterval(() => {
-        bigTrace.draw();
-        miniTrace.draw();
-      }, 500);
+      setInterval(() => bigTrace.draw(), 500);
     } else {
       requestAnimationFrame(loop);
     }
@@ -302,8 +284,8 @@ export default function App() {
       requestAnimationFrame(step);
     });
 
-    const depts = ['Electropathy consultation'];
-    const state = { dept: null, day: null, slot: null };
+    const services = ['Electropathy consultation', 'Yoga', 'Psychological Counselling'];
+    const state = { service: null, day: null, slot: null };
 
     function chipGroup(el, items, key, render) {
       items.forEach((it, i) => {
@@ -323,11 +305,28 @@ export default function App() {
       });
     }
 
-    chipGroup(document.getElementById('deptChips'), depts, 'dept', (c, d) => {
-      c.textContent = d;
+    chipGroup(document.getElementById('serviceChips'), services, 'service', (c, s) => {
+      c.textContent = s;
+    });
+    document.querySelectorAll('[data-service]').forEach((a) => {
+      a.addEventListener('click', () => document.getElementById(`service-${a.dataset.service}`).click());
     });
 
-    document.getElementById('visitDate').addEventListener('change', (e) => {
+    const nav = document.querySelector('.nav');
+    const menuBtn = document.getElementById('menuBtn');
+    menuBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+    });
+    nav.querySelectorAll('.nav-links a').forEach((a) => a.addEventListener('click', () => {
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
+
+    const visitDate = document.getElementById('visitDate');
+    const now = new Date();
+    visitDate.min = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    visitDate.addEventListener('change', (e) => {
       state.day = e.target.value || null;
       updateSummary();
     });
@@ -346,11 +345,12 @@ export default function App() {
     const summary = document.getElementById('summary');
     function updateSummary() {
       const parts = [];
-      if (state.dept) parts.push(state.dept);
+      if (state.service) parts.push(state.service);
       if (state.day) parts.push(new Date(state.day).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }));
       if (state.slot) parts.push(state.slot);
-      summary.textContent = parts.length ? parts.join(' · ') : 'Choose a consultation type.';
+      summary.textContent = parts.length ? `Requested: ${parts.join(' · ')}` : 'No date chosen? We will suggest the next available time.';
     }
+    document.getElementById('service-0').click();
 
     const form = document.getElementById('bookForm');
     function setErr(id, msg) {
@@ -374,35 +374,32 @@ export default function App() {
         ok = false;
       } else setErr('f-phone');
 
-      if (!state.dept) {
-        summary.textContent = 'Please choose a consultation type.';
-        summary.style.color = 'var(--pulse)';
-        ok = false;
-      } else summary.style.color = '';
-
       if (!ok) return;
-      const email = 'thiraiyalhealthcare@gmail.com';
-      const requestedDate = state.day ? new Date(state.day).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : 'No date preference';
+      const mobile = phone.slice(-10);
+      const requestedDate = state.day ? new Date(state.day).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Any day';
       const message = [
-        'Appointment request for Thiraiyal Health Care',
+        'Hello Thiraiyal Health Care, I would like to book an appointment.',
+        '',
         `Name: ${name}`,
-        `Mobile: ${phone.slice(-10)}`,
-        `Consultation: ${state.dept}`,
+        `Mobile: ${mobile}`,
+        `Age: ${form.page.value || '-'}`,
+        `Service: ${state.service || '-'}`,
         `Preferred date: ${requestedDate}`,
-        `Preferred time: ${state.slot || 'No time preference'}`,
-        `Age: ${form.page.value || 'Not provided'}`,
-        `Preferred language: ${form.plang.value}`,
-        `Note: ${form.pnote.value.trim() || 'None'}`,
+        `Preferred time: ${state.slot || 'Any time'}`,
+        `Language: ${form.plang.value}`,
+        `Concern: ${form.pnote.value.trim() || '-'}`,
       ].join('\n');
+      const waLink = `https://wa.me/916382463706?text=${encodeURIComponent(message)}`;
+      const safeName = name.replace(/[<>&"]/g, '');
       const card = document.getElementById('formCard');
       card.innerHTML = `<div class="confirm" role="status">
         <svg class="check" viewBox="0 0 92 92" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="46" cy="46" r="40"/><path d="M29 47l11 11 23-24"/></svg>
-        <h3>Thank you, ${name.replace(/[<>&]/g, '')}.</h3>
-        <p>Your email app should open with your consultation request. Please send it to contact the clinic. Your appointment is not confirmed until the clinic replies.</p>
-        <a class="btn btn-primary" href="mailto:${email}?subject=${encodeURIComponent('Consultation request')}&body=${encodeURIComponent(message)}" style="margin-top:18px">Open email request</a>
-        <p class="preview-note">If your email app does not open, call 6382463706 or email ${email} directly.</p>
+        <h3>Almost done, ${safeName}!</h3>
+        <p>WhatsApp has opened with your booking details. <b>Tap Send</b> to share them with us.<br />Our team will call you on <b>${mobile}</b> to confirm your appointment time.</p>
+        <a class="btn btn-wa" href="${waLink}" target="_blank" rel="noopener" style="margin-top:18px">${WA_ICON} Open WhatsApp again</a>
+        <p class="preview-note">No WhatsApp? Call us at <a href="tel:+916382463706">+91 63824 63706</a> and we will book it for you.</p>
       </div>`;
-      window.location.href = `mailto:${email}?subject=${encodeURIComponent('Consultation request')}&body=${encodeURIComponent(message)}`;
+      window.open(waLink, '_blank', 'noopener');
       card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
     });
 
@@ -437,15 +434,15 @@ export default function App() {
             <img src={logo} alt="Thiraiyal Health Care logo" className="brand-logo" />
             <span className="logo-text"><b>Thiraiyal</b><small>HEALTH CARE</small></span>
           </a>
-          <nav className="nav-links" aria-label="Sections">
-            <a href="#care">Our approach</a><a href="#book">Consultation</a><a href="#visit">Contact</a>
+          <nav className="nav-links" id="navLinks" aria-label="Sections">
+            <a href="#services">Services</a><a href="#care">How it works</a><a href="#book">Book appointment</a><a href="#visit">Contact</a>
           </nav>
           <div className="nav-right">
-            <div className="mini-monitor" title="Illustrative pulse display, not a patient reading" aria-label="Illustrative pulse display, not a patient reading">
-              <canvas id="mini" width="108" height="40" aria-hidden="true"></canvas>
-              <span className="bpm" id="miniBpm">118</span><span className="unit">BPM</span>
-            </div>
-            <a className="btn btn-primary" href="#book">Request<span>&nbsp;consultation</span></a>
+            <a className="nav-call" href={TEL} aria-label={`Call ${PHONE}`}>{phoneIcon}<span>{PHONE}</span></a>
+            <a className="btn btn-primary" href="#book">Book<span>&nbsp;appointment</span></a>
+            <button className="menu-btn" id="menuBtn" type="button" aria-label="Menu" aria-controls="navLinks" aria-expanded="false">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+            </button>
           </div>
         </div>
       </header>
@@ -454,28 +451,83 @@ export default function App() {
         <section className="hero">
           <div className="wrap hero-grid">
             <div className="rise">
-              <div className="eyebrow">Electropathy care · Trichy</div>
-              <h1>Electropathy care, guided by <em id="heroWord">conversation.</em></h1>
-              <p className="lede">Dr. T. Kaviyarasu, Founder &amp; Chairman, welcomes you to discuss your concerns, understand the approach, and consider your next steps.</p>
+              <div className="eyebrow">Electropathy clinic · Trichy</div>
+              <h1>Personal care for you and your family, <em id="heroWord">close to home.</em></h1>
+              <p className="lede">Consult Dr. T. Kaviyarasu, Founder &amp; Chairman of Thiraiyal Health Care. Book online in under a minute, and our team will call you to confirm your visit.</p>
               <div className="hero-cta">
-                <a className="btn btn-primary" href="#book">Request a consultation
+                <a className="btn btn-primary" href="#book">Book an appointment
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
-                <a className="btn btn-ghost" href="#care">Our approach</a>
+                <a className="btn btn-ghost" href={TEL}>{phoneIcon} Call {PHONE}</a>
               </div>
+              <ul className="hero-trust">
+                <li>Consultations in Tamil &amp; English</li>
+                <li>Confirmation by phone call</li>
+                <li>Book on WhatsApp or by phone</li>
+              </ul>
             </div>
 
             <div className="monitor rise" id="monitor">
               <img src={hero} alt="Doctor consulting a patient" className="hero-photo" />
-              <canvas id="ecg" aria-label="Illustrative pulse animation. The displayed BPM is not a patient reading."></canvas>
+              <canvas id="ecg" aria-hidden="true"></canvas>
               <div className="monitor-top">
-                <div>
-                  <div className="readout"><span id="bigBpm">118</span><small>BPM</small></div>
-                  <div style={{ marginTop: 6, opacity: 0.75 }}>ILLUSTRATIVE PULSE · NOT A PATIENT READING</div>
+                <div className="doctor-tag">
+                  <b>Thiraiyal Health Care</b>
+                  <span>Trichy, Tamil Nadu</span>
                 </div>
-                <span className="state-pill">Consultation</span>
               </div>
               <div className="monitor-hint"><span id="hintText">Thoughtful care, one conversation at a time.</span></div>
             </div>
+          </div>
+        </section>
+
+        <section className="services" id="services">
+          <div className="wrap">
+            <div className="section-head rise">
+              <div className="eyebrow">Our services</div>
+              <h2>Holistic care for body and mind.</h2>
+              <p>Alongside our health care services, we offer personalised yoga and professional psychological counselling.</p>
+            </div>
+
+            <article className="service-row rise">
+              <div className="service-media">
+                <img className="media-main" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80" alt="Woman meditating in a seated yoga pose" loading="lazy" decoding="async" />
+                <img className="media-sub" src="https://images.unsplash.com/photo-1758274535230-3641d0632878?auto=format&fit=crop&w=600&q=80" alt="Group yoga class outdoors" loading="lazy" decoding="async" />
+              </div>
+              <div className="service-body">
+                <div className="tagline">Body &amp; breath</div>
+                <h3>Yoga Therapy &amp; Classes</h3>
+                <p>Guided yoga sessions tailored to each client to improve flexibility, strength, posture and inner calm. Every program starts with an assessment of the client's health, goals and comfort level.</p>
+                <ul className="offerings">
+                  <li><b>Personal Yoga Sessions</b><span>One-to-one, at your pace.</span></li>
+                  <li><b>Therapeutic Yoga</b><span>Gentle practice for back pain, stress, sleep and lifestyle conditions.</span></li>
+                  <li><b>Pranayama &amp; Meditation</b><span>Breathing and mindfulness for focus and emotional balance.</span></li>
+                  <li><b>Group Classes</b><span>Small batches for beginners and regular practitioners.</span></li>
+                </ul>
+                <a className="btn btn-primary" href="#book" data-service="1">Book a Yoga Session
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
+              </div>
+            </article>
+
+            <article className="service-row flip rise">
+              <div className="service-media">
+                <img className="media-main" src="https://images.unsplash.com/photo-1758273241086-f3585ef8c2f8?auto=format&fit=crop&w=1200&q=80" alt="Counsellor listening to a client" loading="lazy" decoding="async" />
+                <img className="media-sub" src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=600&q=80" alt="One-to-one conversation" loading="lazy" decoding="async" />
+              </div>
+              <div className="service-body">
+                <div className="tagline">Mind &amp; wellbeing</div>
+                <h3>Psychological Counselling</h3>
+                <p>A safe, confidential and non-judgemental space to talk through what you are facing. Sessions help clients understand their thoughts and emotions, build coping skills and move forward with clarity.</p>
+                <ul className="offerings">
+                  <li><b>Individual Counselling</b><span>Stress, anxiety, low mood, grief and life changes.</span></li>
+                  <li><b>Relationship &amp; Family Counselling</b><span>Support for couples, parents and families.</span></li>
+                  <li><b>Student &amp; Career Guidance</b><span>Exam stress, motivation and career decisions.</span></li>
+                  <li><b>Workplace Wellbeing</b><span>Burnout, resilience and work-life balance.</span></li>
+                </ul>
+                <a className="btn btn-primary" href="#book" data-service="2">Book a Counselling Session
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
+                <p className="service-note">All sessions are strictly confidential. If you are in crisis or immediate danger, please contact your local emergency services.</p>
+              </div>
+            </article>
           </div>
         </section>
 
@@ -542,47 +594,54 @@ export default function App() {
           <div className="wrap">
             <div className="section-head rise">
               <div className="eyebrow">Appointment</div>
-              <h2>Request a consultation.</h2>
-              <p>Share your preferred date and time. The clinic will confirm availability directly.</p>
+              <h2>Book an appointment.</h2>
+              <p>Fill in your details and send them to us on WhatsApp. Our team will call you to confirm the date and time.</p>
             </div>
             <div className="book-grid">
               <div className="form-card" id="formCard">
                 <form id="bookForm" noValidate>
                   <div className="form-step">
-                    <div className="lbl"><span className="n">1</span>Consultation type</div>
-                    <div className="chips wrapchips" id="deptChips" role="group" aria-label="Department"></div>
+                    <div className="lbl"><span className="n">1</span>What would you like to book?</div>
+                    <div className="chips wrapchips" id="serviceChips" role="group" aria-label="Service"></div>
                   </div>
                   <div className="form-step">
-                    <div className="lbl"><span className="n">2</span>Preferred date (optional)</div>
+                    <div className="lbl"><span className="n">2</span>Your details</div>
+                    <div className="fields">
+                      <div className="field" id="f-name"><label htmlFor="pname">Patient name *</label><input id="pname" name="pname" autoComplete="name" placeholder="e.g. Lakshmi R" /><div className="err"></div></div>
+                      <div className="field" id="f-phone"><label htmlFor="pphone">Mobile number *</label><input id="pphone" name="pphone" type="tel" inputMode="numeric" autoComplete="tel" placeholder="10-digit mobile" /><div className="err"></div></div>
+                      <div className="field"><label htmlFor="page">Age</label><input id="page" name="page" inputMode="numeric" placeholder="Years" /></div>
+                      <div className="field"><label htmlFor="plang">Preferred language</label><select id="plang" name="plang"><option>Tamil</option><option>English</option></select></div>
+                    </div>
+                  </div>
+                  <div className="form-step">
+                    <div className="lbl"><span className="n">3</span>When would you like to come? <small className="opt">(optional)</small></div>
                     <div className="field"><input id="visitDate" name="visitDate" type="date" aria-label="Preferred date" /></div>
-                  </div>
-                  <div className="form-step">
-                    <div className="lbl"><span className="n">3</span>Preferred time of day (optional)</div>
                     <div className="chips wrapchips" id="amSlots" role="group" aria-label="Preferred time of day"></div>
                   </div>
                   <div className="form-step">
-                    <div className="lbl"><span className="n">4</span>Your contact details</div>
-                    <div className="fields">
-                      <div className="field" id="f-name"><label htmlFor="pname">Patient name</label><input id="pname" name="pname" autoComplete="name" placeholder="e.g. Lakshmi R" /><div className="err"></div></div>
-                      <div className="field" id="f-phone"><label htmlFor="pphone">Mobile number</label><input id="pphone" name="pphone" inputMode="numeric" autoComplete="tel" placeholder="10-digit mobile" /><div className="err"></div></div>
-                      <div className="field"><label htmlFor="page">Age</label><input id="page" name="page" inputMode="numeric" placeholder="Years" /></div>
-                      <div className="field"><label htmlFor="plang">Preferred language</label><select id="plang" name="plang"><option>Tamil</option><option>English</option></select></div>
-                      <div className="field full"><label htmlFor="pnote">Tell us briefly what's wrong (optional)</label><textarea id="pnote" name="pnote" rows="3" placeholder="e.g. Fever for 2 days, mild headache"></textarea></div>
-                    </div>
+                    <div className="lbl"><span className="n">4</span>Health concern <small className="opt">(optional)</small></div>
+                    <div className="field"><textarea id="pnote" name="pnote" rows="3" aria-label="Health concern" placeholder="e.g. Joint pain for 2 weeks"></textarea></div>
                   </div>
                   <div className="submit-row">
-                    <button className="btn btn-primary" type="submit" id="submitBtn">Prepare email request</button>
-                    <span className="summary-line" id="summary">Choose a consultation type.</span>
+                    <button className="btn btn-wa" type="submit" id="submitBtn">{waIcon} Book on WhatsApp</button>
+                    <span className="summary-line" id="summary"></span>
                   </div>
+                  <p className="preview-note">Prefer to talk? Call <a href={TEL}>{PHONE}</a> and we will book it for you.</p>
                 </form>
               </div>
 
               <aside className="side-card" id="visit">
-                <h3>Thiraiyal Health Care</h3>
-                <div style={{ fontSize: 15, lineHeight: 1.5 }}>Electropathy consultations<br />Trichy, Tamil Nadu</div>
-                <div className="contact-line"><span>Call</span><a className="num" id="phoneNum" href="tel:+916382463706">+91 63824 63706</a><button className="copy" type="button" id="copyBtn">Copy</button></div>
+                <h3>How booking works</h3>
+                <ol className="how">
+                  <li><b>Send your request</b><span>Fill the form, or simply call or WhatsApp us.</span></li>
+                  <li><b>We call you back</b><span>Our team confirms a suitable date and time.</span></li>
+                  <li><b>Visit the clinic</b><span>Meet the doctor at your confirmed time.</span></li>
+                </ol>
+                <h3>Contact us</h3>
+                <div className="contact-line"><span>Call</span><a className="num" id="phoneNum" href={TEL}>{PHONE}</a><button className="copy" type="button" id="copyBtn">Copy</button></div>
+                <div className="contact-line"><span>WhatsApp</span><a href={WA} target="_blank" rel="noopener">Chat with us</a></div>
                 <div className="contact-line"><span>Email</span><a href="mailto:thiraiyalhealthcare@gmail.com">thiraiyalhealthcare@gmail.com</a></div>
-                <p className="care-note">Electropathy is an alternative system of care and is not a substitute for emergency care or treatment prescribed by your medical practitioner.</p>
+                <div className="contact-line"><span>Location</span><span>Trichy, Tamil Nadu</span></div>
               </aside>
             </div>
           </div>
@@ -607,17 +666,22 @@ export default function App() {
             </div>
             <nav className="footer-block" aria-label="Footer navigation">
               <h2>Explore</h2>
-              <a href="#care">Our approach</a>
-              <a href="#book">Request a consultation</a>
+              <a href="#services">Services</a>
+              <a href="#care">How it works</a>
+              <a href="#book">Book an appointment</a>
               <a href="#top">Back to top</a>
             </nav>
           </div>
           <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} Thiraiyal Health Care</span>
-            <span>Electropathy is an alternative system of care and does not replace emergency care or prescribed treatment.</span>
+            <span>© {new Date().getFullYear()} Thiraiyal Health Care. All rights reserved.</span>
           </div>
         </div>
       </footer>
+
+      <div className="mobile-bar">
+        <a className="btn btn-ghost" href={TEL}>{phoneIcon} Call</a>
+        <a className="btn btn-wa" href="#book">{waIcon} Book appointment</a>
+      </div>
     </>
   );
 }
