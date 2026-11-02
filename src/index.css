@@ -13,20 +13,7 @@
   --body: "Figtree", "Segoe UI", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --nav-h: 64px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #081A1B; --surface: #0F2627; --tint: #133332; --ink: #E6F2EF; --ink-2: #9DB8B4;
-    --pine: #5FD3C1; --teal: #34C6B2; --pulse: #FF7A63; --line: #1F4241;
-    --shadow: 0 18px 50px -24px rgba(0,0,0,.7); color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-  --bg: #081A1B; --surface: #0F2627; --tint: #133332; --ink: #E6F2EF; --ink-2: #9DB8B4;
-  --pine: #5FD3C1; --teal: #34C6B2; --pulse: #FF7A63; --line: #1F4241;
-  --shadow: 0 18px 50px -24px rgba(0,0,0,.7); color-scheme: dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
