@@ -4,10 +4,18 @@ import hero from './assets/hero.jpg';
 
 const PHONE = '+91 63824 63706';
 const TEL = 'tel:+916382463706';
-const WA = 'https://wa.me/916382463706?text=' + encodeURIComponent('Hello Thiraiyal Health Care, I would like to book an appointment.');
+const PHONE2 = '+91 63806 35571';
+const TEL2 = 'tel:+916380635571';
+const EMAIL = 'thiraiyalhealthcare@gmail.com';
+const ADDRESS = ['No. 14, Iraivan Nagar,', 'Avoor Road, Mathur,', 'Pudukkottai – 622 515'];
+const MAP = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('14 Iraivan Nagar, Avoor Road, Mathur, Pudukkottai 622515');
+const WA_CHANNEL = 'https://whatsapp.com/channel/0029VbDr5CpDZ4LbKgdU4l3k';
+const FACEBOOK = 'https://www.facebook.com/share/19vKzFagc1/';
+const WA ='https://wa.me/916382463706?text=' + encodeURIComponent('Hello Thiraiyal Health Care, I would like to book an appointment.');
 const WA_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.3z"/></svg>';
 const waIcon = <span className="ico-inline" dangerouslySetInnerHTML={{ __html: WA_ICON }} />;
-const phoneIcon = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" /></svg>;
+const fbIcon = <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z" /></svg>;
+const phoneIcon =<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" /></svg>;
 
 export default function App() {
   const initialized = useRef(false);
@@ -435,7 +443,7 @@ export default function App() {
             <span className="logo-text"><b>Thiraiyal</b><small>HEALTH CARE</small></span>
           </a>
           <nav className="nav-links" id="navLinks" aria-label="Sections">
-            <a href="#services">Services</a><a href="#care">How it works</a><a href="#book">Book appointment</a><a href="#visit">Contact</a>
+            <a href="#services">Services</a><a href="#team">Our team</a><a href="#care">How it works</a><a href="#book">Book appointment</a><a href="#visit">Contact</a>
           </nav>
           <div className="nav-right">
             <a className="nav-call" href={TEL} aria-label={`Call ${PHONE}`}>{phoneIcon}<span>{PHONE}</span></a>
@@ -451,18 +459,18 @@ export default function App() {
         <section className="hero">
           <div className="wrap hero-grid">
             <div className="rise">
-              <div className="eyebrow">Electropathy clinic · Trichy</div>
+              <div className="eyebrow">Electropathy · Yoga · Counselling · Pudukkottai</div>
               <h1>Personal care for you and your family, <em id="heroWord">close to home.</em></h1>
-              <p className="lede">Consult Dr. T. Kaviyarasu, Founder &amp; Chairman of Thiraiyal Health Care. Book online in under a minute, and our team will call you to confirm your visit.</p>
+              <p className="lede">Consult Dr. T. Kaviyarasu, BEMS., Dip(VT)., Dip(AY)., Founder &amp; Chairman of Thiraiyal Health Care. Book online in under a minute, and our team will call you to confirm your visit.</p>
               <div className="hero-cta">
                 <a className="btn btn-primary" href="#book">Book an appointment
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
                 <a className="btn btn-ghost" href={TEL}>{phoneIcon} Call {PHONE}</a>
               </div>
               <ul className="hero-trust">
+                <li>Excellence in Electropathy Medical Awareness Award 2021</li>
+                <li>Govt certified yoga teacher</li>
                 <li>Consultations in Tamil &amp; English</li>
-                <li>Confirmation by phone call</li>
-                <li>Book on WhatsApp or by phone</li>
               </ul>
             </div>
 
@@ -472,7 +480,7 @@ export default function App() {
               <div className="monitor-top">
                 <div className="doctor-tag">
                   <b>Thiraiyal Health Care</b>
-                  <span>Trichy, Tamil Nadu</span>
+                  <span>Mathur, Pudukkottai</span>
                 </div>
               </div>
               <div className="monitor-hint"><span id="hintText">Thoughtful care, one conversation at a time.</span></div>
@@ -503,6 +511,7 @@ export default function App() {
                   <li><b>Pranayama &amp; Meditation</b><span>Breathing and mindfulness for focus and emotional balance.</span></li>
                   <li><b>Group Classes</b><span>Small batches for beginners and regular practitioners.</span></li>
                 </ul>
+                <p className="led-by">Led by <b>Dr. T. Kaviyarasu</b>, Govt Certified Yoga Teacher and Evaluator.</p>
                 <a className="btn btn-primary" href="#book" data-service="1">Book a Yoga Session
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
               </div>
@@ -523,11 +532,56 @@ export default function App() {
                   <li><b>Student &amp; Career Guidance</b><span>Exam stress, motivation and career decisions.</span></li>
                   <li><b>Workplace Wellbeing</b><span>Burnout, resilience and work-life balance.</span></li>
                 </ul>
+                <p className="led-by">With <b>T. Sindhuja</b>, M.Sc (Psychology)., CCPsy.</p>
                 <a className="btn btn-primary" href="#book" data-service="2">Book a Counselling Session
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
                 <p className="service-note">All sessions are strictly confidential. If you are in crisis or immediate danger, please contact your local emergency services.</p>
               </div>
             </article>
+          </div>
+        </section>
+
+        <section className="team" id="team">
+          <div className="wrap">
+            <div className="section-head rise">
+              <div className="eyebrow">Our team</div>
+              <h2>Meet the people who care for you.</h2>
+            </div>
+            <div className="team-grid">
+              <article className="team-card rise">
+                <div className="team-top">
+                  <div className="avatar" aria-hidden="true">TK</div>
+                  <div>
+                    <h3>Dr. T. Kaviyarasu</h3>
+                    <div className="creds">BEMS., Dip(VT)., Dip(AY).</div>
+                    <div className="role">Founder &amp; Chairman</div>
+                  </div>
+                </div>
+                <ul className="team-points">
+                  <li>Govt Certified Yoga Teacher and Evaluator</li>
+                </ul>
+                <div className="award">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6" /><path d="M8.5 14 7 22l5-3 5 3-1.5-8" /></svg>
+                  <div>
+                    <b>Excellence in Electropathy Medical Awareness Award – 2021</b>
+                    <span>Presented by Thiru. Vallamandi Natarajan, Former Minister for Tourism, Government of Tamil Nadu</span>
+                  </div>
+                </div>
+              </article>
+              <article className="team-card rise">
+                <div className="team-top">
+                  <div className="avatar alt" aria-hidden="true">TS</div>
+                  <div>
+                    <h3>T. Sindhuja</h3>
+                    <div className="creds">M.Sc (Psychology)., CCPsy.</div>
+                    <div className="role">Co-Founder</div>
+                  </div>
+                </div>
+                <ul className="team-points">
+                  <li>Tamilnadu Rights Project</li>
+                </ul>
+              </article>
+            </div>
           </div>
         </section>
 
@@ -639,9 +693,18 @@ export default function App() {
                 </ol>
                 <h3>Contact us</h3>
                 <div className="contact-line"><span>Call</span><a className="num" id="phoneNum" href={TEL}>{PHONE}</a><button className="copy" type="button" id="copyBtn">Copy</button></div>
+                <div className="contact-line"><span>Call</span><a className="num" href={TEL2}>{PHONE2}</a></div>
                 <div className="contact-line"><span>WhatsApp</span><a href={WA} target="_blank" rel="noopener">Chat with us</a></div>
-                <div className="contact-line"><span>Email</span><a href="mailto:thiraiyalhealthcare@gmail.com">thiraiyalhealthcare@gmail.com</a></div>
-                <div className="contact-line"><span>Location</span><span>Trichy, Tamil Nadu</span></div>
+                <div className="contact-line"><span>Email</span><a href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+                <address className="clinic-address">
+                  <b>Clinic address</b>
+                  {ADDRESS.map((l) => <span key={l}>{l}</span>)}
+                  <a className="btn btn-ghost" href={MAP} target="_blank" rel="noopener">Get directions</a>
+                </address>
+                <div className="social">
+                  <a href={WA_CHANNEL} target="_blank" rel="noopener">{waIcon} WhatsApp Channel</a>
+                  <a href={FACEBOOK} target="_blank" rel="noopener">{fbIcon} Facebook</a>
+                </div>
               </aside>
             </div>
           </div>
@@ -656,17 +719,21 @@ export default function App() {
                 <img src={logo} alt="" className="brand-logo" />
                 <span className="logo-text"><b>Thiraiyal</b><small>HEALTH CARE</small></span>
               </a>
-              <p>Electropathy consultations in Trichy.</p>
+              <p>Electropathy, yoga and psychological counselling in Mathur, Pudukkottai.</p>
             </div>
             <div className="footer-block">
               <h2>Contact</h2>
-              <a href="tel:+916382463706">+91 63824 63706</a>
-              <a href="mailto:thiraiyalhealthcare@gmail.com">thiraiyalhealthcare@gmail.com</a>
-              <span>Trichy, Tamil Nadu</span>
+              <a href={TEL}>{PHONE}</a>
+              <a href={TEL2}>{PHONE2}</a>
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+              <span>{ADDRESS.join(' ')}</span>
+              <a href={WA_CHANNEL} target="_blank" rel="noopener">WhatsApp Channel</a>
+              <a href={FACEBOOK} target="_blank" rel="noopener">Facebook</a>
             </div>
             <nav className="footer-block" aria-label="Footer navigation">
               <h2>Explore</h2>
               <a href="#services">Services</a>
+              <a href="#team">Our team</a>
               <a href="#care">How it works</a>
               <a href="#book">Book an appointment</a>
               <a href="#top">Back to top</a>
