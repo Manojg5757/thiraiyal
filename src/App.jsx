@@ -190,10 +190,10 @@ export default function App() {
     }
 
     const stages = [
-      { name: 'Listen', progress: 25, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h24a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H20l-8 7v-7H8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z"/><path d="M13 21h.01M20 21h.01M27 21h.01"/><path d="M40 18c3 3 3 9 0 12"/></svg>' },
-      { name: 'Understand', progress: 50, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="21" cy="21" r="12"/><path d="M30 30l11 11"/><path d="M14 22h4l2-5 3 9 2-4h3"/></svg>' },
-      { name: 'Discuss', progress: 75, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="7" width="30" height="36" rx="5"/><path d="M17 7v-1a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v1"/><path d="M24 18v12M18 24h12"/></svg>' },
-      { name: 'Follow up', progress: 100, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 41s-15-9-15-21a8 8 0 0 1 15-4 8 8 0 0 1 15 4c0 12-15 21-15 21z"/><path d="M17 23h5l2-4 3 7 2-3h3"/></svg>' },
+      { name: 'Listen', img: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=600&h=600&q=70', progress: 25, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h24a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H20l-8 7v-7H8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z"/><path d="M13 21h.01M20 21h.01M27 21h.01"/><path d="M40 18c3 3 3 9 0 12"/></svg>' },
+      { name: 'Understand', img: 'https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=600&h=600&q=70', progress: 50, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="21" cy="21" r="12"/><path d="M30 30l11 11"/><path d="M14 22h4l2-5 3 9 2-4h3"/></svg>' },
+      { name: 'Discuss', img: 'https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=600&h=600&q=70', progress: 75, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="7" width="30" height="36" rx="5"/><path d="M17 7v-1a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v1"/><path d="M24 18v12M18 24h12"/></svg>' },
+      { name: 'Follow up', img: 'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=600&h=600&q=70', progress: 100, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 41s-15-9-15-21a8 8 0 0 1 15-4 8 8 0 0 1 15 4c0 12-15 21-15 21z"/><path d="M17 23h5l2-4 3 7 2-3h3"/></svg>' },
     ];
 
     const arrive = { name: 'Start here', progress: 0, ico: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="14" r="6"/><path d="M12 42c0-8 5-14 12-14s12 6 12 14"/><path d="M38 8l2-3M41 13h3"/></svg>' };
@@ -204,10 +204,14 @@ export default function App() {
       const x = 150 + R * Math.cos(a), y = 150 + R * Math.sin(a);
       nodesG.insertAdjacentHTML(
         'beforeend',
-        `<g class="node" data-i="${i}"><circle cx="${x}" cy="${y}" r="15" fill="var(--surface)" stroke="var(--line)" stroke-width="3"/><text x="${x}" y="${y + 4.5}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="var(--ink-2)">${i + 1}</text></g>`
+        `<g class="node" data-i="${i}"><circle class="halo" cx="${x}" cy="${y}" r="24"/><circle cx="${x}" cy="${y}" r="15" fill="var(--surface)" stroke="var(--line)" stroke-width="3"/><text x="${x}" y="${y + 4.5}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="var(--ink-2)">${i + 1}</text></g>`
       );
     });
 
+    const ringCenter = document.querySelector('.ring-center');
+    const ringPhotos = document.getElementById('ringPhotos');
+    stages.forEach((s) => ringPhotos.insertAdjacentHTML('beforeend', `<img src="${s.img}" alt="" loading="lazy" decoding="async" />`));
+    const ringImgs = [...ringPhotos.children];
     const ringProg = document.getElementById('ringProg');
     const stageIco = document.getElementById('stageIco');
     const stageName = document.getElementById('stageName');
@@ -222,6 +226,8 @@ export default function App() {
       const s = idx < 0 ? arrive : stages[idx];
       stageIco.innerHTML = s.ico;
       stageName.textContent = s.name;
+      ringCenter.classList.toggle('photo', idx >= 0);
+      ringImgs.forEach((im, i) => im.classList.toggle('on', i === idx));
       if (!reduce) {
         stageIco.animate([{ transform: 'scale(.6) rotate(-12deg)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 450, easing: 'cubic-bezier(.2,.8,.2,1.2)' });
       }
@@ -229,9 +235,10 @@ export default function App() {
       progressBar.style.width = `${s.progress}%`;
       nodesG.querySelectorAll('.node').forEach((n) => {
         const on = +n.dataset.i <= idx;
-        n.querySelector('circle').setAttribute('fill', on ? 'var(--teal)' : 'var(--surface)');
-        n.querySelector('circle').setAttribute('stroke', on ? 'var(--teal)' : 'var(--line)');
+        n.querySelector('circle:not(.halo)').setAttribute('fill', on ? 'var(--teal)' : 'var(--surface)');
+        n.querySelector('circle:not(.halo)').setAttribute('stroke', on ? 'var(--teal)' : 'var(--line)');
         n.querySelector('text').setAttribute('fill', on ? 'var(--bg)' : 'var(--ink-2)');
+        n.classList.toggle('current', +n.dataset.i === idx);
       });
       stepEls.forEach((el, i) => el.classList.toggle('on', i === idx));
     }
@@ -596,12 +603,20 @@ export default function App() {
               <div className="stage-visual" aria-hidden="true">
                 <div className="ring-wrap">
                   <svg viewBox="0 0 300 300" id="ring">
+                    <defs>
+                      <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stopColor="#34C6B2" />
+                        <stop offset="1" stopColor="#0B4F4C" />
+                      </linearGradient>
+                    </defs>
+                    <circle className="orbit" cx="150" cy="150" r="146" fill="none" stroke="var(--teal)" strokeWidth="1.5" strokeDasharray="2 9" strokeLinecap="round" />
                     <circle cx="150" cy="150" r="128" fill="none" stroke="var(--line)" strokeWidth="10" />
-                    <circle id="ringProg" cx="150" cy="150" r="128" fill="none" stroke="var(--teal)" strokeWidth="10" strokeLinecap="round" transform="rotate(-90 150 150)" strokeDasharray="804.2" strokeDashoffset="804.2" />
+                    <circle id="ringProg" cx="150" cy="150" r="128" fill="none" stroke="url(#ringGrad)" strokeWidth="10" strokeLinecap="round" transform="rotate(-90 150 150)" strokeDasharray="804.2" strokeDashoffset="804.2" />
                     <g id="nodes"></g>
                   </svg>
                   <div className="ring-center">
-                    <div>
+                    <div className="ring-photos" id="ringPhotos"></div>
+                    <div className="ring-label">
                       <div className="ico" id="stageIco"></div>
                       <div className="stage-name" id="stageName">Start here</div>
                     </div>
@@ -613,6 +628,7 @@ export default function App() {
               <div className="steps">
                 <article className="step" data-stage="0">
                   <div className="step-card">
+                    <div className="step-photo"><img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=900&q=75" alt="Doctor listening to a patient" loading="lazy" decoding="async" /><span className="step-badge">01</span></div>
                     <div className="tagline">Step 1 · Listen</div>
                     <h3>Start with your concerns.</h3>
                     <p>Share what has brought you in, your health history, and the questions you want answered.</p>
@@ -620,6 +636,7 @@ export default function App() {
                 </article>
                 <article className="step" data-stage="1">
                   <div className="step-card">
+                    <div className="step-photo"><img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=900&q=75" alt="Doctor explaining results on a screen" loading="lazy" decoding="async" /><span className="step-badge">02</span></div>
                     <div className="tagline">Step 2 · Understand</div>
                     <h3>Learn about the approach.</h3>
                     <p>Discuss what electropathy involves, what is known and what remains uncertain, and how it relates to your current care.</p>
@@ -627,6 +644,7 @@ export default function App() {
                 </article>
                 <article className="step" data-stage="2">
                   <div className="step-card">
+                    <div className="step-photo"><img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=900&q=75" alt="Doctor discussing next steps with a patient" loading="lazy" decoding="async" /><span className="step-badge">03</span></div>
                     <div className="tagline">Step 3 · Discuss</div>
                     <h3>Make an informed choice.</h3>
                     <p>Talk through suitable next steps and make decisions based on your needs, preferences, and existing medical advice.</p>
@@ -634,6 +652,7 @@ export default function App() {
                 </article>
                 <article className="step" data-stage="3">
                   <div className="step-card">
+                    <div className="step-photo"><img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=75" alt="Holding hands in support" loading="lazy" decoding="async" /><span className="step-badge">04</span></div>
                     <div className="tagline">Step 4 · Follow up</div>
                     <h3>Agree on what comes next.</h3>
                     <p>Before you leave, clarify any follow-up you may need and how to contact the clinic with questions.</p>
